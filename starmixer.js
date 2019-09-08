@@ -156,7 +156,7 @@ bot
             }
         }
 
-        bot.chat.watchAllChannelsForNewMessages(onMessage);
+        bot.chat.watchAllChannelsForNewMessages(m=>onMessage(m).catch(console.error));
 
     })
     .catch(error => {
