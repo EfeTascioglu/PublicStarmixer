@@ -41,14 +41,14 @@ function buildTransaction(shuffle) {
       amount: val.value+"",
       source: val.from
     })), new StellarSdk.TransactionBuilder(account, { fee })).setTimeout(99999).build()
-   transaction.sign(sourceKeypair)
   // Let's see the XDR (encoded in base64) of the transaction we just built
   return transaction.toEnvelope().toXDR('base64');
 }
 
 async function signTransaction(xdr,sigs){
 	const transaction =  new StellarSdk.Transaction(xdr)
-	sigs.forEach((sig)=>transaction.addSignature(sig[0],sig[1]));
+	transaction.sign(sourceKeypair)
+	sigs.forEach((xdr)=>transaction.signatures.push(new StellarSdk.Transaction(xdr).signatures[0]));
 	console.log(transaction.toEnvelope().toXDR('base64'))
 	return server.submitTransaction(transaction);
 }
