@@ -1,4 +1,6 @@
 const c = require("./config.json");
+const t = require("./transaction");
+const s = require("./shuffle");
 
 const GATHERING_TIME = 5 * 1000; // amount of time to wait to gather users
 const SIGNING_TIME = 10 * 1000;
@@ -12,7 +14,7 @@ function help(){
 let state = "idle";
 
 // Pending transactions
-// Object will be in forms { fromUsername: string, fromWallet: walletId, toWallet: walletId, toUsername: string, value: integer }
+// Object will be in forms { fromUsername: string, from: walletId, to: walletId, toUsername: string, value: integer }
 let transactions = [];
 
 // Signing signatures
@@ -26,12 +28,8 @@ const paperkey = c.botKey;
 bot
   .init(username, paperkey, {verbose: false})
   .then(async () => {
+	await t.load()
     console.log(`Your bot is initialized. It is logged in as ${bot.myInfo().username}`)
-
-    const message = {
-      body: `Hello kbot! This is ${bot.myInfo().username} saying hello from my device ${bot.myInfo().devicename}`,
-    }
-
 
     const onMessage = async message => {
        const channel = message.channel;
@@ -91,9 +89,9 @@ bot
 
 
 				transactions.push({
-					toWallet: toWallet,
+					to: toWallet,
 					toUsername: targetUsername,
-					fromWallet: fromWallet,
+					from: fromWallet,
 					fromUsername: message.sender.username,
 					value: amount
 				});
@@ -127,11 +125,12 @@ bot
 
 
 // Does transactions between everyone in array
-function transact() {
+async function transact() {
 	console.log("Transaction occurring! Switching to signing state!");
 	state = "signing";
 
 	let transaction;
+	const xdr = t.buildTransaction(s(transactions));
 
 
 
@@ -145,8 +144,8 @@ function transact() {
 			public: false,
 			topicType: "chat"
 		};
-		bot.chat.send(channel, {body:"type '!sign <signature>' to sign the transaction to "
-				 + transaction.toUsername + " for " + transaction.value + " lumens!"});
+		bot.chat.send(channel, {body:"Type `keybase wallet sign --xdr "+xdr+" --account "+transaction.from+"` to sign the transaction to "
+				 + transaction.toUsername + " for " + transaction.value + " lumens! \n Then send the signature to the bot with `!sign <signature>`"});
 	}
 
 	console.log("Transactions occurring: ", transactions);
