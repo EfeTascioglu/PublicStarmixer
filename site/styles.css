@@ -15,7 +15,7 @@ body {
     padding-top:30px; padding-bottom:30px;
     background-color: rgb(255, 111, 33);
     float: center;
-    width: 30em;
+    width: 35em;
     box-shadow: 10px 10px 5px rgb(75, 75, 75);
 }
 
@@ -37,7 +37,7 @@ h3 {
     background-color: rgb(64, 129, 241);
     border-radius: 25px;
     width: 250px;
-    border: 2px solid black;
+    border: 2px solid rgb(4, 4, 119);
     font-size: 25px;
 }
 
@@ -48,6 +48,9 @@ h3 {
 
 a {
     text-decoration: none;
+}
+a:visited {
+    color: rgb(4, 4, 119);
 }
 
 code {
