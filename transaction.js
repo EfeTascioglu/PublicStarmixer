@@ -9,12 +9,12 @@ const sourcePublicKey = sourceKeypair.publicKey();
 
 // Configure StellarSdk to talk to the horizon instance hosted by Stellar.org
 // To use the live network, set the hostname to 'horizon.stellar.org'
-const server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+const server = new StellarSdk.Server('https://horizon.stellar.org');
 
 // Uncomment the following line to build transactions for the live network. Be
 // sure to also change the horizon hostname.
-// StellarSdk.Network.usePublicNetwork();
-StellarSdk.Network.useTestNetwork();
+StellarSdk.Network.usePublicNetwork();
+//StellarSdk.Network.useTestNetwork();
 
 let account, fee;
 

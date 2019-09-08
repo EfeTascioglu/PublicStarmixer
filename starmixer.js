@@ -2,7 +2,7 @@ const c = require("./config.json");
 const t = require("./transaction");
 const s = require("./shuffle");
 
-const GATHERING_TIME = 5 * 1000; // amount of time to wait to gather users
+const GATHERING_TIME = 30 * 1000; // amount of time to wait to gather users
 
 //help line
 function help() {
