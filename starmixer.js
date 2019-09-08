@@ -1,4 +1,6 @@
 const GATHERING_TIME = 5 * 1000; // amount of time to wait to gather users
+const SIGNING_TIME = 10 * 1000;
+
 
 //help line
 function help(){
@@ -11,6 +13,8 @@ let state = "idle";
 // Object will be in forms { fromUsername: string, fromWallet: walletId, toWallet: walletId, toUsername: string, value: integer }
 let transactions = [];
 
+// Signing signatures
+let signatures = [];
 
 const Bot = require('keybase-bot')
 
@@ -33,8 +37,25 @@ bot
        let args = message.content.text.body.split(" ");
        console.log("args: ", args);
 
+
+	// Handle signing logic
+	if (args[0].toLowerCase().localeCompare("!sign") === 0) {
+
+		if (state !== "signing") {
+			bot.chat.send(channel, {body: "Not currently signing!"});
+			return;
+		}
+
+
+		// TODO sign
+	}
+
        if (args[0].toLowerCase().localeCompare("!mix") === 0) {
 
+	if (state === "signing") {
+		bot.chat.send(channel, {body: "Signing in progress! Try again later!"});
+		return;
+	}
 	  // Valid form
 	   if (args.length >= 2 ){
 		let amount = parseInt(args[1]);
@@ -127,4 +148,8 @@ function transact() {
 	}
 
 	console.log("Transactions occurring: ", transactions);
+
+
 }
+
+
