@@ -56,6 +56,7 @@ bot
 
                 signatures.push([fromWallet.accountId, args[1]])
                 if (signatures.length === transactions.length) {
+					console.log(signatures)
                     const res = await t.signTransaction(xdr, signatures)
                     // Send a message to all signers
                     for (transaction of transactions) {
