@@ -126,6 +126,7 @@ bot
 
 // Does transactions between everyone in array
 async function transact() {
+try{
 	console.log("Transaction occurring! Switching to signing state!");
 	state = "signing";
 
@@ -149,7 +150,9 @@ async function transact() {
 	}
 
 	console.log("Transactions occurring: ", transactions);
-
+}catch(e){
+console.log(e);
+}
 
 }
 
