@@ -42,22 +42,20 @@ bot
 
 		// Trim '@' off of it
 		if (targetUsername.charAt(0) === '@') {
-			targetUsername = targetUsername.substr(1);
+			console.log("Removing an '@'");
+			targetUsername = targetUsername.substring(1);
 		}
 
-		console.log("Message received: amount is ", amount);
-		console.log("                  target is ", targetUsername);
+		console.log("Message received: amount is:", amount);
+		console.log("                  target is:", targetUsername);
 
 		// TODO check more validations
 		if (amount >= 0 && !isNaN(amount)){
 
-
-
 			try {
 				// If lookup fails, error will be thrown
 				let fromWallet = await bot.wallet.lookup(message.sender.username);
-				let toWallet = await bot.wallet.lookup(args[2]);
-
+				let toWallet = await bot.wallet.lookup(targetUsername);
 
 				// Valid statment
 				bot.chat.send(channel, {body: "You entered a valid number yo! Let's Transact!!!"});
@@ -80,7 +78,7 @@ bot
 
 			} catch (err) {
 				bot.chat.send(channel, {body: "Sorry, we couldn't find that user!"});
-
+				console.log("Error grabbing wallet",err);
 			}
 
 		} else {
