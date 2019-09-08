@@ -1,4 +1,6 @@
-const GATHERING_TIME = 30 * 1000; // amount of time to wait to gather users
+const GATHERING_TIME = 5 * 1000; // amount of time to wait to gather users
+const SIGNING_TIME = 10 * 1000;
+
 
 //help line
 function help(){
@@ -8,9 +10,11 @@ function help(){
 let state = "idle";
 
 // Pending transactions
-// Object will be in forms { from: walletId, to: walletId, value: integer }
+// Object will be in forms { fromUsername: string, fromWallet: walletId, toWallet: walletId, toUsername: string, value: integer }
 let transactions = [];
 
+// Signing signatures
+let signatures = [];
 
 const Bot = require('keybase-bot')
 
@@ -33,8 +37,25 @@ bot
        let args = message.content.text.body.split(" ");
        console.log("args: ", args);
 
+
+	// Handle signing logic
+	if (args[0].toLowerCase().localeCompare("!sign") === 0) {
+
+		if (state !== "signing") {
+			bot.chat.send(channel, {body: "Not currently signing!"});
+			return;
+		}
+
+
+		// TODO sign
+	}
+
        if (args[0].toLowerCase().localeCompare("!mix") === 0) {
 
+	if (state === "signing") {
+		bot.chat.send(channel, {body: "Signing in progress! Try again later!"});
+		return;
+	}
 	  // Valid form
 	   if (args.length >= 2 ){
 		let amount = parseInt(args[1]);
@@ -58,8 +79,6 @@ bot
 				let toWallet = await bot.wallet.lookup(targetUsername);
 
 				// Valid statment
-				bot.chat.send(channel, {body: "You entered a valid number yo! Let's Transact!!!"});
-
 				if (state === "idle") {
 
 					console.log("Switching to gathering state!");
@@ -70,15 +89,17 @@ bot
 
 
 				transactions.push({
-					to: toWallet,
-					from: fromWallet,
+					toWallet: toWallet,
+					toUsername: targetUsername,
+					fromWallet: fromWallet,
+					fromUsername: message.sender.username,
 					value: amount
 				});
 				bot.chat.send(channel, {body: "Transaction added to queue!"});
 
 			} catch (err) {
 				bot.chat.send(channel, {body: "Sorry, we couldn't find that user!"});
-				console.log("Error grabbing wallet",err);
+//				console.log("Error grabbing wallet",err);
 			}
 
 		} else {
@@ -108,6 +129,27 @@ function transact() {
 	console.log("Transaction occurring! Switching to signing state!");
 	state = "signing";
 
+	let transaction;
+
+
+
+	// Send a message to all signers
+	for (transaction of transactions) {
+
+		let name = transaction.fromUsername + "," + bot.myInfo().username;
+		console.log("Channel name is:", name);
+		let channel = {
+			name: name,
+			public: false,
+			topicType: "chat"
+		};
+		bot.chat.send(channel, {body:"type '!sign <signature>' to sign the transaction to "
+				 + transaction.toUsername + " for " + transaction.value + " lumens!"});
+	}
 
 	console.log("Transactions occurring: ", transactions);
+
+
 }
+
+
