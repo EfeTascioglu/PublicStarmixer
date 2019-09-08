@@ -52,8 +52,6 @@ bot
                     return;
                 }
 
-                let fromWallet = await bot.wallet.lookup(message.sender.username);
-
                 signatures.push(args[1])
                 if (signatures.length === transactions.length) {
 					console.log(signatures)
@@ -78,9 +76,7 @@ bot
                     state = "idle"
                     xdr = null
                 }
-            }
-
-            if (args[0].toLowerCase().localeCompare("!mix") === 0) {
+            } else if (args[0].toLowerCase().localeCompare("!mix") === 0) {
 
                 if (state === "signing") {
                     bot.chat.send(channel, {
