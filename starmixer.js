@@ -89,9 +89,9 @@ bot
 
 
 				transactions.push({
-					to: toWallet,
+					to: toWallet.accountId,
 					toUsername: targetUsername,
-					from: fromWallet,
+					from: fromWallet.accountId,
 					fromUsername: message.sender.username,
 					value: amount
 				});
