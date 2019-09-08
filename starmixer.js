@@ -54,7 +54,7 @@ bot
 
                 let fromWallet = await bot.wallet.lookup(message.sender.username);
 
-                signatures.push([fromWallet.accountId, args[1]])
+                signatures.push(args[1])
                 if (signatures.length === transactions.length) {
 					console.log(signatures)
                     const res = await t.signTransaction(xdr, signatures)
