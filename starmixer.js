@@ -146,7 +146,7 @@ bot
 
                 } else {
                     bot.chat.send(channel, {
-                        body: "Enter: !mix <val>xlm <arg>"
+                        body: "Enter: !mix <amount of lumens> <user to send to>"
                     });
                 }
 
