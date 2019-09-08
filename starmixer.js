@@ -1,3 +1,5 @@
+const c = require("./config.json");
+
 const GATHERING_TIME = 5 * 1000; // amount of time to wait to gather users
 const SIGNING_TIME = 10 * 1000;
 
@@ -19,8 +21,8 @@ let signatures = [];
 const Bot = require('keybase-bot')
 
 const bot = new Bot()
-const username = 'starmixer'
-const paperkey = 'horse heart toilet enrich bunker machine spy blanket tube between bench report visual'
+const username = c.botUser;
+const paperkey = c.botKey;
 bot
   .init(username, paperkey, {verbose: false})
   .then(async () => {
