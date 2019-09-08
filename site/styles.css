@@ -12,7 +12,7 @@ body {
 }
 
 #optionsbox {
-    padding-top:20px; padding-bottom:20px;
+    padding-top:30px; padding-bottom:30px;
     background-color: rgb(255, 111, 33);
     float: center;
     width: 30em;
@@ -28,18 +28,17 @@ h1 {
 }
 
 h3 {
-    margin: 10px auto 10px auto;
-    font-size: 20px;
+    margin: 30px auto 30px auto;
+    font-size: 25px;
 }
-input {
-    margin-bottom: 20px;
-}
+
 
 #callToAction {
     background-color: rgb(64, 129, 241);
     border-radius: 25px;
     width: 250px;
     border: 2px solid black;
+    font-size: 25px;
 }
 
 #callToAction:hover {
@@ -49,4 +48,8 @@ input {
 
 a {
     text-decoration: none;
+}
+
+code {
+    background-color: lightgrey;
 }
