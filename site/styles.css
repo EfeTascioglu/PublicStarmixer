@@ -1,0 +1,8 @@
+body {
+    background-image: linear-gradient(to bottom right, rgb(76, 142, 255), white); 
+}
+#optionsbox {
+    background-color: rgb(255, 111, 33);
+    float: center;
+    width: 30em;
+}

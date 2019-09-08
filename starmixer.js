@@ -1,9 +1,8 @@
+const GATHERING_TIMEOUT = 5 * 1000; // amount of time to wait to gather users
+const SIGNING_TIMEOUT = 10 * 1000;
 const c = require("./config.json");
 const t = require("./transaction");
 const s = require("./shuffle");
-
-const GATHERING_TIME = 5 * 1000; // amount of time to wait to gather users
-const SIGNING_TIME = 10 * 1000;
 
 
 //help line
@@ -78,13 +77,14 @@ bot
 				let fromWallet = await bot.wallet.lookup(message.sender.username);
 				let toWallet = await bot.wallet.lookup(targetUsername);
 
-				// Valid statment
+				// Valid statment, start waiting for timeout
 				if (state === "idle") {
 
 					console.log("Switching to gathering state!");
 					state = "gathering";
 
-					setTimeout(transact, GATHERING_TIME); 
+					// Begin the transaction signing
+					setTimeout(transact, GATHERING_TIMEOUT); 
 				}
 
 
@@ -150,7 +150,32 @@ async function transact() {
 
 	console.log("Transactions occurring: ", transactions);
 
-
+	// Add a timeout for signing
+	setTimeout(resetState, SIGNING_TIMEOUT);
 }
 
+
+// Resets everything to original state
+function resetState() {
+
+
+        // Send a message to all transacts that signing timed out.
+        for (transaction of transactions) {
+                let name = transaction.fromUsername + "," + bot.myInfo().username;
+                console.log("Channel name is:", name);
+                let channel = {
+                        name: name,
+                        public: false,
+                        topicType: "chat"
+                };
+                bot.chat.send(channel, {body:"Transaction signing timed out, as not everyone signed. Type '!mix' to start again!"});
+        }
+
+
+
+
+	transactions = [];
+	signatures = [];
+	state = "idle";
+}
 
